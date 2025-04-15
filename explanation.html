@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explicación del Color</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body, html {
+      height: 100%;
+      width: 100%;
+      transition: background-color 1s ease;
+      background-color: #333;
+      color: white;
+    }
+
+    .center {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      word-break: break-word;
+    }
+
+    p {
+      font-size: 1.25rem;
+      margin-bottom: 20px;
+      word-break: break-word;
+    }
+
+    a {
+      margin-top: 20px;
+      display: inline-block;
+      color: white;
+      text-decoration: underline;
+      font-size: 1.1rem;
+      word-break: break-word;
+    }
+
+    .color-box {
+      width: 200px;
+      height: 200px;
+      border-radius: 8px;
+      margin: 20px auto;
+    }
+
+    pre {
+        margin-top: 20px;
+        display: inline-block;
+        color: white;
+        font-size: 1.1rem;
+        white-space: pre-wrap; 
+        word-break: break-word;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .content {
+      animation: fadeIn 1.5s ease;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+
+      .color-box {
+        width: 150px;
+        height: 150px;
+      }
+
+      pre {
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      p {
+        font-size: 0.9rem;
+      }
+
+      .color-box {
+        width: 120px;
+        height: 120px;
+      }
+
+      pre {
+        font-size: 0.9rem;
+      }
+    }
+    footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 0.9rem;
+  color: #ccc;
+  border-top: 1px solid #555;
+  margin-top: 40px;
+  word-break: break-word;
+}
+
+@media (max-width: 768px) {
+  footer {
+    font-size: 0.8rem;
+    padding: 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  footer {
+    font-size: 0.7rem;
+    padding: 10px;
+  }
+}
+  </style>
+</head>
+<body>
+  <div class="container-fluid center content" id="explanationSection">
+    <h2>Cómo tu Nombre se Convierte en un Color</h2>
+    <p>
+      El color se genera procesando los caracteres de tu nombre a través de una función de hash.
+      Cada carácter se transforma en un valor numérico, y esos valores se usan luego para crear los valores de Rojo, Verde y Azul (RGB) que forman un color.
+    </p>
+    <p>
+      El resultado es un color único basado en los caracteres de tu nombre.
+    </p>
+
+    <div class="color-box" id="colorBox"></div>
+    <p id="nameDisplay"></p>
+    <p id="hexDisplay"></p>
+    <p id="rgbDisplay"></p>
+
+  </div>
+  <br/>
+  <div class="container center">
+    <h2>Transformación de los Caracteres</h2>
+    <p>
+      Cada carácter del nombre se convierte en un valor numérico basado en su código ASCII. Por ejemplo:
+    </p>
+    <pre id="asciiCodes"></pre>
+
+    <h2>Proceso de Hashing</h2>
+    <p>
+      El valor resultante de sumar y desplazar los códigos ASCII de los caracteres del nombre se usa para calcular los componentes de color en rojo, verde y azul (RGB). Esta transformación asegura que cada nombre genere un color único.
+    </p>
+    <p>
+      Este proceso de hashing asegura que un cambio pequeño en el nombre, como cambiar una letra, producirá un color completamente diferente.
+    </p>
+
+    <h3>Valor Hash Detallado</h3>
+    <p>
+      El valor hash se calcula paso a paso, acumulando el valor numérico de cada carácter del nombre y aplicando operaciones bitwise.
+    </p>
+    <pre id="hashSteps"></pre>
+
+    <h3>Conversión a Hexadecimal Paso a Paso</h3>
+    <p>
+      A continuación, se muestra cómo el valor hash final se descompone y se convierte a su representación hexadecimal (el código de color).
+    </p>
+    <pre id="hexConversionSteps"></pre>
+
+    <h3>Resultado Final</h3>
+    <p id="finalHashDisplay"></p>
+    <p>
+      Finalmente, el valor hash se utiliza para determinar las intensidades de los colores rojo, verde y azul. Esto se logra mediante operaciones bitwise para extraer diferentes partes del hash. Luego, cada intensidad (un número entre 0 y 255) se convierte a su representación hexadecimal de dos dígitos.
+    </p>
+    <p>
+      Por ejemplo, si la intensidad del rojo es 255, se convierte a "ff" en hexadecimal. Si es 10, se convierte a "0a". Estos tres valores hexadecimales (para rojo, verde y azul) se combinan con un "#" al principio para formar el código de color hexadecimal final.
+    </p>
+    <a href="index.html">Probar Otro Nombre</a>
+  </div>
+  <footer class="footer">
+    © 2025 André Marín Alonso. Todos los derechos reservados.
+  </footer>
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const name = decodeURIComponent(urlParams.get('name'));
+
+    if (name) {
+      const colorData = stringToColor(name);
+      document.getElementById('colorBox').style.backgroundColor = colorData.hex;
+      document.getElementById('nameDisplay').innerText = `Nombre: ${name}`;
+      document.getElementById('hexDisplay').innerText = `Hex: ${colorData.hex}`;
+      document.getElementById('rgbDisplay').innerText = `RGB: ${colorData.rgb}`;
+
+      let asciiCodes = '';
+      for (let i = 0; i < name.length; i++) {
+        asciiCodes += `'${name[i]}' → ${name.charCodeAt(i)}<br>`;
+      }
+      document.getElementById('asciiCodes').innerHTML = asciiCodes;
+
+      let hashSteps = '';
+      const hash = stringToHash(name);
+      let currentHash = 0;
+      for (let i = 0; i < name.length; i++) {
+        currentHash = name.charCodeAt(i) + ((currentHash << 5) - currentHash);
+        hashSteps += `Paso ${i + 1}: Carácter '${name[i]}', código ASCII ${name.charCodeAt(i)}, hash actual: ${currentHash}<br>`;
+      }
+      document.getElementById('hashSteps').innerHTML = hashSteps;
+
+      document.getElementById('finalHashDisplay').innerText = `Hash Final: ${hash}`;
+
+      let hexConversionSteps = '';
+      const r = colorData.r;
+      const g = colorData.g;
+      const b = colorData.b;
+
+      hexConversionSteps += `Valor Hash Final: ${hash}<br><br>`;
+      hexConversionSteps += `Componente Rojo (R):<br>`;
+      hexConversionSteps += `  Desplazamiento a la derecha (>> 16): ${hash} >> 16 = ${r.toString(10)}<br>`;
+      hexConversionSteps += `  Operación AND (& 0xFF): ${r.toString(10)} & 255 = ${r.toString(10)}<br>`;
+      hexConversionSteps += `  Conversión a Hexadecimal: ${r.toString(10)} → ${toHex(r)}<br><br>`;
+
+      hexConversionSteps += `Componente Verde (G):<br>`;
+      hexConversionSteps += `  Desplazamiento a la derecha (>> 8): ${hash} >> 8 = ${g.toString(10)}<br>`;
+      hexConversionSteps += `  Operación AND (& 0xFF): ${g.toString(10)} & 255 = ${g.toString(10)}<br>`;
+      hexConversionSteps += `  Conversión a Hexadecimal: ${g.toString(10)} → ${toHex(g)}<br><br>`;
+
+      hexConversionSteps += `Componente Azul (B):<br>`;
+      hexConversionSteps += `  Operación AND (& 0xFF): ${hash} & 255 = ${b.toString(10)}<br>`;
+      hexConversionSteps += `  Conversión a Hexadecimal: ${b.toString(10)} → ${toHex(b)}<br><br>`;
+
+      hexConversionSteps += `Código Hexadecimal Final: #${toHex(r)}${toHex(g)}${toHex(b)}`;
+
+      document.getElementById('hexConversionSteps').innerHTML = hexConversionSteps;
+    }
+
+    function stringToColor(str) {
+      let hash = stringToHash(str);
+      const r = (hash >> 16) & 0xFF;
+      const g = (hash >> 8) & 0xFF;
+      const b = hash & 0xFF;
+      return { hex: `#${toHex(r)}${toHex(g)}${toHex(b)}`, rgb: `rgb(${r}, ${g}, ${b})`, r, g, b };
+    }
+
+    function stringToHash(str) {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      return hash;
+    }
+
+    function toHex(c) {
+      const hex = c.toString(16);
+      return hex.length == 1 ? "0" + hex : hex;
+    }
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

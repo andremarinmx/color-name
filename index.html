@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nombre a color</title>
+  <link rel="icon" href="color.ico" type="image/x-icon">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body, html {
+      height: 100%;
+      width: 100%;
+      transition: background-color 1s ease;
+    }
+
+    .center {
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 20px;
+    }
+
+    input {
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      border-radius: 8px;
+      border: 2px solid #ccc;
+      margin: 10px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    input:focus {
+      border-color: #333;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #333;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+      margin: 10px;
+    }
+
+    button:hover {
+      background-color: #555;
+    }
+
+    .result {
+      animation: fadeIn 1.5s ease;
+      display: none;
+      color: white;
+    }
+
+    h1 {
+      font-size: 4rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1.5rem;
+    }
+
+    a {
+      margin-top: 20px;
+      display: inline-block;
+      color: white;
+      text-decoration: underline;
+      font-size: 1.1rem;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="center" id="formSection">
+    <h1>Descubre qué color es tu nombre</h1>
+    <input id="nameInput" placeholder="Ingresa tu nombre" />
+    <button onclick="generateColor()">Ver Color</button>
+  </div>
+
+  <div class="center result" id="resultSection">
+    <h1 id="nameDisplay"></h1>
+    <p id="hexDisplay"></p>
+    <p id="rgbDisplay"></p>
+    <a id="explanationLink" href="">Ver Explicación</a>
+    <a href="index.html">Probar Otro Nombre</a>
+  </div>
+
+  <script>
+    const input = document.getElementById('nameInput');
+    input.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        generateColor();
+      }
+    });
+
+    function stringToColor(str) {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      const r = (hash >> 16) & 0xFF;
+      const g = (hash >> 8) & 0xFF;
+      const b = hash & 0xFF;
+      return { hex: `#${toHex(r)}${toHex(g)}${toHex(b)}`, rgb: `rgb(${r}, ${g}, ${b})`, r, g, b };
+    }
+
+    function toHex(c) {
+      const hex = c.toString(16);
+      return hex.length == 1 ? "0" + hex : hex;
+    }
+
+    function generateColor() {
+      const name = input.value.trim();
+      if (!name) return;
+
+      const color = stringToColor(name);
+      document.body.style.backgroundColor = color.hex;
+
+      document.getElementById("nameDisplay").innerText = name;
+      document.getElementById("hexDisplay").innerText = `Hex: ${color.hex}`;
+      document.getElementById("rgbDisplay").innerText = `RGB: ${color.rgb}`;
+      document.getElementById("explanationLink").href = `explanation.html?name=${encodeURIComponent(name)}`;
+
+      document.getElementById("formSection").style.display = "none";
+      document.getElementById("resultSection").style.display = "flex";
+    }
+  </script>
+</body>
+</html>
